@@ -43,8 +43,33 @@ class UIBaghchal(object):
 
     def new_game(self):
         print("Not Yet Implemented")
-
-
+# this class will be responsible to show, whose chal is pending
+class whotomove():
+    def __init__(self, canvas):
+        self.canvas = canvas
+        self.draw_baghngoat_box()
+        self.baghToMove = True
+        self.goatToMove = False
+    # creates initial bxes, orange one will be on to move, i.e bagh
+    def draw_baghngoat_box(self):
+        self.bagbox = self.canvas.create_rectangle(138,2,230,23,outline = "black", fill = "orange")
+        self.baghboxtxt = self.canvas.create_text(176, 12, text="Tiger",font=("Purisa", 15))
+        self.goatbox = self.canvas.create_rectangle(230,2,300,23,outline = "black", fill = "lightblue")
+        self.goatboxtxt = self.canvas.create_text(266, 12, text="Goat",font=("Purisa", 15))
+        
+    #this function will switch after a mouse click , who to move
+    def switchRole(self,eventorigin):
+        print("switch")
+        if self.baghToMove: # if bagh is active, it's for goats turn to orange
+            self.canvas.itemconfig(self.bagbox, fill='lightblue')
+            self.canvas.itemconfig(self.goatbox, fill='orange')
+            self.baghToMove = False
+            self.goatToMove = True
+        else:
+            self.canvas.itemconfig(self.bagbox, fill='orange')
+            self.canvas.itemconfig(self.goatbox, fill='lightblue')
+            self.baghToMove = True
+            self.goatToMove = False
 def rules_bagchal():
     import webbrowser
     webbrowser.open("https://en.wikipedia.org/wiki/Bagh_Chal")
@@ -105,10 +130,18 @@ def application():
     help.add_command(label='About', command=about_bagchal)
     print(statustext)
 
-
+    # create whotomove box
+    whotomoveobj = whotomove(canvas)
+    #whotomoveobj.switchRole()
+    # open the two photos
     openPhoto()
-    bagh1 = canvas.create_image(80, 80,  image=baghPhoto)
-    root.bind("<Button 1>",getorigin)
+    bagh1 = canvas.create_image(80, 80,  image=baghPhoto) # bagh image created
+    #canvas.delete(bagh1)  #delete bagh image
+
+    # this binding of button 1 is for left mouse click, if click happens, tiger & goat box
+    # will switch color
+    root.bind("<Button 1>",whotomoveobj.switchRole)
+    #root.bind("<Button 1>",getorigin)  # get coordinate on mouse click
     root.mainloop()
 
 
