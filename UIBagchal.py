@@ -7,7 +7,7 @@ class UIBaghchal(object):
     def __init__(self, canvas, statustext):
         self.canvas = canvas #Canvas where board is drawn
         self.statustext = statustext #gives information about grid
-        self.board_grid_x = [80, 180, 280, 380, 480]
+        self.board_grid_x = [80, 180, 280, 380, 480]#x cordinates for lines
         self.board_grid_y = [80, 180, 280, 380, 480]
         self.board_rect = [50, 50, 512, 512]
         self.draw_board()
