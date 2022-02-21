@@ -57,6 +57,17 @@ def about_bagchal():
 def configure():
     print("Implemented Not Yet")
 
+def getorigin(eventorigin):
+      global x,y
+      x = eventorigin.x
+      y = eventorigin.y
+      print(x,y)
+
+def openPhoto():
+    global baghPhoto,goatPhoto
+    baghPhoto  = PhotoImage(file="bagh.png")
+    goatPhoto  = PhotoImage(file="goat.png")
+
 
 def application():
     root = Tk()
@@ -94,6 +105,10 @@ def application():
     help.add_command(label='About', command=about_bagchal)
     print(statustext)
 
+
+    openPhoto()
+    bagh1 = canvas.create_image(80, 80,  image=baghPhoto)
+    root.bind("<Button 1>",getorigin)
     root.mainloop()
 
 
