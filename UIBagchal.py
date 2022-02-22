@@ -1,6 +1,26 @@
 from tkinter import *
 
+from bagh_goat import *
+import time
+#from ChalMove import createBagh
 
+""" 
+class baghClass():
+    #baghphoto  = PhotoImage(file="bagh.png")
+    def __init__(self,x,y,canvas,baghPhoto):
+        self.x=x
+        self.y = y
+        self.canvas = canvas
+        self.baghPhoto=baghPhoto
+        
+        self.draw_bagh()
+        
+        
+    def draw_bagh(self):
+        self.bagh = self.canvas.create_image(self.x, self.y,  image=self.baghPhoto) # bagh image created
+   """   
+  
+    
 class UIBaghchal(object):
     '''UI class of Bagchal game'''
 
@@ -92,6 +112,28 @@ def openPhoto():
     global baghPhoto,goatPhoto
     baghPhoto  = PhotoImage(file="bagh.png")
     goatPhoto  = PhotoImage(file="goat.png")
+def createBagh(canvas,baghPhoto):
+   
+    
+    baghObj1 = baghClass(480, 80, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    baghObj1 = baghClass(480, 480, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    baghObj1 = baghClass(80, 80, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    baghObj1 = baghClass(80, 480, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    print("bagh count : "+str(len(baghList)))
+
+# move bagh[0] to the point mouse clicked
+def moveBagh(eventorigin):
+    mousex = eventorigin.x
+    mousey = eventorigin.y
+    print(str(mousex-baghList[0].x)+" "+str(mousey-baghList[0].y))
+    # canvas.move(img object, what to minus form imageY,what to add to imageY)
+    canvas.move(baghList[0].baghImg,mousex-baghList[0].x,mousey-baghList[0].y)
+    baghList[0].x = mousex # update bagh[0]'s coordinate
+    baghList[0].y = mousey
 
 
 def application():
@@ -100,6 +142,7 @@ def application():
     root.resizable(False, False)
     frame = Frame(root)
     frame.pack(fill=BOTH, expand=1)
+    global canvas
     canvas = Canvas(frame, width=700, height=550, bg="white")
     canvas.pack(fill=BOTH, expand=1, side=TOP, padx=1, pady=1)
     statustext = StringVar()
@@ -132,17 +175,26 @@ def application():
 
     # create whotomove box
     whotomoveobj = whotomove(canvas)
-    #whotomoveobj.switchRole()
+   
     # open the two photos
     openPhoto()
-    bagh1 = canvas.create_image(80, 80,  image=baghPhoto) # bagh image created
+    # create 4 bagh aat 4 corners
+    createBagh(canvas, baghPhoto)
+    #baghList[0].x=280
+    #baghList[0].y=280
+    #canvas.move(baghList[0].baghImg,80,280) # this move is done by adding values to x,y
+    #time.sleep(10)
+    
+    #root.after(2000,createBagh(canvas, baghPhoto))
+  
     #canvas.delete(bagh1)  #delete bagh image
 
     # this binding of button 1 is for left mouse click, if click happens, tiger & goat box
     # will switch color
-    root.bind("<Button 1>",whotomoveobj.switchRole)
+    #root.bind("<Button 1>",whotomoveobj.switchRole)
     #root.bind("<Button 1>",getorigin)  # get coordinate on mouse click
+    root.bind("<Button 1>",moveBagh) 
     root.mainloop()
 
-
+baghList=[] # baghlist global variable
 application()
