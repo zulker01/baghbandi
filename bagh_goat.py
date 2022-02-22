@@ -21,7 +21,7 @@ class baghClass():
         
         
     def draw_bagh(self):
-        self.bagh = self.canvas.create_image(self.x, self.y,  image=self.baghPhoto) # bagh image created
+        self.baghImg = self.canvas.create_image(self.x, self.y,  image=self.baghPhoto) # bagh image created
       
 
 class goatClass():
