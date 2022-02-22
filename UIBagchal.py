@@ -157,11 +157,17 @@ def createBagh(canvas,baghPhoto):
 def creat_goat():
     goatObj1 = goatClass(80, 180, canvas, goatPhoto)
     goatList.append(baghObj1)
-    
+
+def     
 # move bagh[0] to the point mouse clicked
 def moveBagh(eventorigin):
     mousex = eventorigin.x
     mousey = eventorigin.y
+"""
+    for i in range(4):
+        if checkifBaghiclicked(mousex,mousey,i):
+            # select bagh i , break
+            """
     print(str(mousex-baghList[0].x)+" "+str(mousey-baghList[0].y))
     # canvas.move(img object, what to minus form imageY,what to add to imageY)
     canvas.move(baghList[0].baghImg,mousex-baghList[0].x,mousey-baghList[0].y)
