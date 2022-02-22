@@ -25,15 +25,20 @@ class baghClass():
 class UIBaghchal(object):
     '''UI class of Bagchal game'''
 
-    def __init__(self, canvas, statustext):
+    def __init__(self, canvas, statustext,root):
+        self.root=root
         self.canvas = canvas  # Canvas where board is drawn
         self.statustext = statustext  # gives information about grid
         self.board_grid_x = [80, 180, 280, 380, 480]  # x cordinates for lines
+
         self.board_grid_y = [80, 180, 280, 380, 480]
         self.board_rect = [50, 50, 512, 512]
         self.coordinate_index_map = {}
         self.draw_board()
+        self.create_PlaceGoatButton()
+
         self.coordinate_mapping()
+
 
     def draw_board(self):
         self.canvas.create_rectangle(*self.board_rect, fill='yellow')
@@ -45,6 +50,22 @@ class UIBaghchal(object):
         board_center_x = self.board_grid_x[2]
         board_center_y = self.board_grid_y[2]
 
+        # create points chart:
+        self.canvas.create_rectangle(680,25,795,49,fill="yellow")
+        self.canvas.create_text(720, 38, text="Points",font=("Purisa", 13))
+
+        self.canvas.create_rectangle(680,49,770,74,fill="yellow")
+        self.canvas.create_rectangle(770,49,795,74,fill="white",outline="black")
+        self.canvas.create_text(720, 65, text="Bagh",font=("Purisa", 13))
+        
+        self.canvas.create_rectangle(680,75,770,100,fill="yellow")
+        self.canvas.create_rectangle(770,75,795,100,fill="white",outline="black")
+        self.canvas.create_text(720, 90, text="Goat",font=("Purisa", 13))
+        
+        
+        self.canvas.create_rectangle(680,180,770,205,fill="yellow")
+        self.canvas.create_rectangle(770,180,795,205,fill="white",outline="black")
+        self.canvas.create_text(720, 190, text="Alive Goat",font=("Purisa", 11))
         for x in self.board_grid_x:
             self.canvas.create_line(x, board_min_y, x, board_max_y)  # vertical lines
 
@@ -63,6 +84,17 @@ class UIBaghchal(object):
                                 board_min_x, board_center_y)
         self.canvas.create_line(board_min_x, board_center_y,
                                 board_center_x, board_min_y)
+    # this function create a place goat button in the UI, this button adds a goat in the board
+    def create_PlaceGoatButton(self):
+        # create button to place goat, 680,235
+           
+  
+        # Creating a Button , which calles creat_goat function on press, 
+        placeGoatbtn = Button(self.root, text = 'Place a new Goat',bd=4,bg="yellow",font=("Purisa", 10), command=creat_goat)
+  
+        #    Set the position of button to coordinate (100, 20)
+        placeGoatbtn.place(x=680, y=235)
+
 
     def new_game(self):
         print("Not Yet Implemented")
@@ -149,19 +181,31 @@ def createBagh(canvas, baghPhoto):
     baghList.append(baghObj1)
     baghObj1 = baghClass(80, 480, canvas, baghPhoto)
     baghList.append(baghObj1)
-    print("bagh count : " + str(len(baghList)))
+
+    print("bagh count : "+str(len(baghList)))
+# this function creates a goat, & adds on board
+def creat_goat():
+    goatObj1 = goatClass(80, 180, canvas, goatPhoto)
+    goatList.append(baghObj1)
 
 
+
+
+   
 # move bagh[0] to the point mouse clicked
 def moveBagh(eventorigin):
     mousex = eventorigin.x
     mousey = eventorigin.y
+
+    print(str(mousex-baghList[0].x)+" "+str(mousey-baghList[0].y))
+
     from_position = get_index((baghList[0].x, baghList[0].y))
     print(from_position)
     path_list = baghList[0].possible_move_list(from_position)
     oval_list = possible_path_circle(path_list)
 
     # print(str(mousex - baghList[0].x) + " " + str(mousey - baghList[0].y))
+
     # canvas.move(img object, what to minus form imageY,what to add to imageY)
     if baghList[0].is_valid_move(from_position, mousex, mousey)[0]:
         val = baghList[0].is_valid_move(from_position, mousex, mousey)[1]
@@ -193,6 +237,7 @@ def create_circle(x, y, r, canvasName):  # center coordinates, radius
 
 def application():
     root = Tk()
+    root.geometry("800x600")
     root.title("Bagchal by Sadnan,Zulker and Iftakhar")
     root.resizable(False, False)
     frame = Frame(root)
@@ -204,7 +249,7 @@ def application():
     status = Label(frame, textvariable=statustext,
                    borderwidth=2, relief=RIDGE)
     status.pack(expand=1, side=BOTTOM, fill=X)
-    game = UIBaghchal(canvas, statustext)
+    game = UIBaghchal(canvas, statustext,root)
     menu = Menu(root)
     root['menu'] = menu
     gamemenu = Menu(menu, tearoff=0)
@@ -246,6 +291,7 @@ def application():
 
     # this binding of button 1 is for left mouse click, if click happens, tiger & goat box
     # will switch color
+
     # root.bind("<Button 1>",whotomoveobj.switchRole)
     # root.bind("<Button 1>",getorigin)  # get coordinate on mouse click
     root.bind("<Button 1>", moveBagh)
@@ -253,5 +299,6 @@ def application():
     root.mainloop()
 
 
-baghList = []  # baghlist global variable
+baghList=[] # baghlist global variable
+goatList=[]
 application()
