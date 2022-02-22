@@ -1,6 +1,25 @@
 from tkinter import *
 
+from bagh_goat import *
+#from ChalMove import createBagh
 
+""" 
+class baghClass():
+    #baghphoto  = PhotoImage(file="bagh.png")
+    def __init__(self,x,y,canvas,baghPhoto):
+        self.x=x
+        self.y = y
+        self.canvas = canvas
+        self.baghPhoto=baghPhoto
+        
+        self.draw_bagh()
+        
+        
+    def draw_bagh(self):
+        self.bagh = self.canvas.create_image(self.x, self.y,  image=self.baghPhoto) # bagh image created
+   """   
+  
+    
 class UIBaghchal(object):
     '''UI class of Bagchal game'''
 
@@ -92,7 +111,18 @@ def openPhoto():
     global baghPhoto,goatPhoto
     baghPhoto  = PhotoImage(file="bagh.png")
     goatPhoto  = PhotoImage(file="goat.png")
-
+def createBagh(canvas,baghPhoto):
+   
+    
+    baghObj1 = baghClass(480, 80, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    baghObj1 = baghClass(480, 480, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    baghObj1 = baghClass(80, 80, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    baghObj1 = baghClass(80, 480, canvas, baghPhoto)
+    baghList.append(baghObj1)
+    print("bagh count : "+str(len(baghList)))
 
 def application():
     root = Tk()
@@ -135,7 +165,11 @@ def application():
     #whotomoveobj.switchRole()
     # open the two photos
     openPhoto()
-    bagh1 = canvas.create_image(80, 80,  image=baghPhoto) # bagh image created
+    createBagh(canvas, baghPhoto)
+   
+    #baghObj2 = baghClass(480, 480, canvas, baghPhoto)
+    #bagho = canvas.create_image(80,480 , image=baghPhoto) # bagh image created
+  
     #canvas.delete(bagh1)  #delete bagh image
 
     # this binding of button 1 is for left mouse click, if click happens, tiger & goat box
@@ -144,5 +178,5 @@ def application():
     #root.bind("<Button 1>",getorigin)  # get coordinate on mouse click
     root.mainloop()
 
-
+baghList=[]
 application()
