@@ -193,29 +193,38 @@ def creat_goat():
 
    
 # move bagh[0] to the point mouse clicked
-def moveBagh(eventorigin):
-    mousex = eventorigin.x
-    mousey = eventorigin.y
+def possibleMoveForBagh(mousex,mousey,i):
+    
 
-    print(str(mousex-baghList[0].x)+" "+str(mousey-baghList[0].y))
+    print(str(mousex-baghList[i].x)+" "+str(mousey-baghList[i].y))
 
-    from_position = get_index((baghList[0].x, baghList[0].y))
+    from_position = get_index((baghList[i].x, baghList[i].y))
     print(from_position)
-    path_list = baghList[0].possible_move_list(from_position)
+    path_list = baghList[i].possible_move_list(from_position)
     oval_list = possible_path_circle(path_list)
-
+    return oval_list
     # print(str(mousex - baghList[0].x) + " " + str(mousey - baghList[0].y))
 
+    
+def moveBagh(mousex,mousey,i):
+    from_position = get_index((baghList[i].x, baghList[i].y))
+    rint("moving")
     # canvas.move(img object, what to minus form imageY,what to add to imageY)
-    if baghList[0].is_valid_move(from_position, mousex, mousey)[0]:
-        val = baghList[0].is_valid_move(from_position, mousex, mousey)[1]
+    if baghList[i].is_valid_move(from_position, mousex, mousey)[0]:
+        val = baghList[i].is_valid_move(from_position, mousex, mousey)[1]
         tup_x, tup_y = coordinate_index_map[val]
         # print(tup)
-        canvas.move(baghList[0].baghImg, mousex - baghList[0].x, mousey - baghList[0].y)
-        baghList[0].x = tup_x  # update bagh[0]'s coordinate
-        baghList[0].y = tup_y
-        oval_list.clear()
+        canvas.move(baghList[i].baghImg, mousex - baghList[i].x, mousey - baghList[i].y)
+        baghList[i].x = tup_x  # update bagh[0]'s coordinate
+        baghList[i].y = tup_y
+        print("moved")
+        #clear_possible_ovals(oval_list)
 
+def clear_possible_ovals(oval_list):
+    for oval_name in oval_list:
+        canvas.delete(oval_name)
+        print("deleted "+str(oval_name))
+    oval_list.clear()
 
 def possible_path_circle(path_list):
     r = 15
@@ -224,6 +233,10 @@ def possible_path_circle(path_list):
         x, y = coordinate_index_map[i]
         oval_name = create_circle(x, y, r, canvas)
         oval_list.append(oval_name)
+        #canvas.delete(oval_name)
+        print(oval_name)
+    print("oval lists :")
+    print(oval_list)
     return oval_list
 
 
@@ -234,6 +247,28 @@ def create_circle(x, y, r, canvasName):  # center coordinates, radius
     y1 = y + r
     return canvasName.create_oval(x0, y0, x1, y1)
 
+#def checkifClickedOnBagh(eventorigin):
+
+def mouseControl(eventorigin):
+    
+    mousex = eventorigin.x
+    mousey = eventorigin.y
+    baghOvalList=list()
+    banghNo = 0
+    global baghClickedFlag
+    if baghClickedFlag:
+        moveBagh(mousex,mousey,baghNo)
+        baghClickedFlag=False
+        clear_possible_ovals(baghOvalList)
+    # check if click on a bagh : 
+    for i in range(4):
+        if baghList[i].if_clicked_on_bagh(mousex,mousey):
+            baghOvalList=possibleMoveForBagh(mousex,mousey,i)
+            print("bagh "+str(i)+" clicked")
+            baghClickedFlag = True
+            baghNo=i
+            break
+    
 
 def application():
     root = Tk()
@@ -294,7 +329,8 @@ def application():
 
     # root.bind("<Button 1>",whotomoveobj.switchRole)
     # root.bind("<Button 1>",getorigin)  # get coordinate on mouse click
-    root.bind("<Button 1>", moveBagh)
+
+    root.bind("<Button 1>", mouseControl)
     print(type(baghList[0]))
     root.mainloop()
 

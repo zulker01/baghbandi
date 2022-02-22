@@ -10,6 +10,7 @@ import math
 
 
 class baghClass():
+    baghImgRadius = 20
     possible_moves = {
         0: [1, 5, 6], 1: [2, 0, 6], 2: [3, 1, 7, 6, 8], 3: [4, 2, 8], 4: [3, 9, 8],
         5: [6, 10, 0], 6: [7, 5, 11, 1, 10, 2, 12, 0], 7: [8, 6, 12, 2], 8: [9, 7, 13, 3, 12, 4, 14, 2], 9: [8, 14, 4],
@@ -46,7 +47,7 @@ class baghClass():
         for i in self.possible_moves[from_position]:  # gives adjacent nodes against current position
             cur_x, cur_y = coordinate_index_map[i]
             pos = get_index((cur_x, cur_y))
-            if (cur_x - to_x) ** 2 + (cur_y - to_y) ** 2 < 16:
+            if (cur_x - to_x) ** 2 + (cur_y - to_y) ** 2 < 36:
                 return True, pos
         else:
             return False, -1
@@ -54,7 +55,12 @@ class baghClass():
     def possible_move_list(self, from_position):
         return self.possible_moves[from_position]
 
-
+    def if_clicked_on_bagh(self,mousex,mousey):
+        # check if mouse click is on this bagh
+        if (mousex - self.x) ** 2 + (mousey - self.y) ** 2 < self.baghImgRadius**2:
+            return True
+        else:
+            return False
 class goatClass():
     # baghphoto  = PhotoImage(file="bagh.png")
     def __init__(self, x, y, canvas, goatPhoto):
