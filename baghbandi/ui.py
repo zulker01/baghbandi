@@ -63,7 +63,13 @@ class UIGame(object):
         board_max_y = self.board_grid_y[-1]
         board_center_x = self.board_grid_x[2]
         board_center_y = self.board_grid_y[2]
-
+        
+        """
+        self.canvas.create_rectangle(500,180,570,205,fill="yellow")
+        self.canvas.create_rectangle(500,205,570,235,fill="white",outline="black")
+        self.canvas.create_text(537, 190, text="Alive Goat",font=("Purisa", 11))
+        self.canvas.create_text(537, 215, text=self.board.goatsToBePlaced,font=("Purisa", 11))
+        """
         for x in self.board_grid_x:
             self.canvas.create_line(x, board_min_y, x, board_max_y)
 
@@ -174,7 +180,7 @@ class UIGame(object):
             self.canvas.delete(cid)
 
         if not self.board.winner:
-            self.statustext.set('Turn: %s | R: %d | D: %d' %
+            self.statustext.set('Turn: %s \n\n ALive Goat: %d \n\n Dead Goat: %d' %
                                 (self.board.turn, self.board.goatsToBePlaced, self.board.deadGoats))
 
             if not self.ai_turn:
@@ -331,13 +337,14 @@ tk.resizable(0, 0)
 frame = tkinter.Frame(tk)
 frame.pack(fill=BOTH, expand=1)
 
-canvas = tkinter.Canvas(frame, width=600, height=460)
+canvas = tkinter.Canvas(frame, width=680, height=460)
 canvas.pack(fill=BOTH, expand=1, side=TOP, padx=1, pady=1)
-
+#output = canvas.create_rectangle(500,205,570,235,fill="white",outline="black")
 statustext = tkinter.StringVar()
 status = tkinter.Label(frame, textvariable=statustext,
-                       borderwidth=2, relief=RIDGE)
-status.pack(expand=1, side=BOTTOM, fill=X)
+                       borderwidth=2, relief=RIDGE).place(x=500,y=100)
+#status.place(relx = .5,rely = 0.)
+#status.pack( side=LEFT)
 
 game = UIGame(canvas, statustext)
 tk.bind('<Control-n>', lambda event: game.new())
