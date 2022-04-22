@@ -331,7 +331,7 @@ tk.resizable(0, 0)
 frame = tkinter.Frame(tk)
 frame.pack(fill=BOTH, expand=1)
 
-canvas = tkinter.Canvas(frame, width=460, height=460)
+canvas = tkinter.Canvas(frame, width=600, height=460)
 canvas.pack(fill=BOTH, expand=1, side=TOP, padx=1, pady=1)
 
 statustext = tkinter.StringVar()
