@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+##!/usr/bin/env python3
 
 import os
 import configparser
@@ -18,12 +18,14 @@ class UIGame(object):
     # index to column conversion
     _idx_to_col = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E'}
 
-    def __init__(self, canvas, statustext):
+    def __init__(self, canvas, statustext, tiger, goat):
         # self.board = Board('1GG1G/1GGGT/1GGGG/GGTGG/GTGTG t g0 c3 mA3')
         self.board = Board()
 
         self.canvas = canvas
         self.statustext = statustext
+        self.tiger = tiger
+        self.goat = goat
 
         self.cids = []
         self.from_idx = None
@@ -33,7 +35,7 @@ class UIGame(object):
 
         self.board_grid_x = [30, 130, 230, 330, 430]
         self.board_grid_y = [30, 130, 230, 330, 430]
-        self.board_rect = [2, 2, 462, 462]
+        self.board_rect = [2, 2, 458, 458]
 
         self.game = None
         self.win = ''
@@ -206,14 +208,16 @@ class UIGame(object):
                                  itertools.product(self.board_grid_x,
                                                    self.board_grid_y)):
             if entry == "T":
-                self.cids.append(self.canvas.create_oval(x - tr, y - tr,
-                                                         x + tr, y + tr,
-                                                         fill=self.tiger_color))
+                # tiger = tkinter.PhotoImage(file="image/bagh.png")
+                # self.canvas.create_image(0, 0, image=tiger)
+                self.cids.append(self.canvas.create_image(x, y, image=self.tiger))
+                # self.canvas.create_oval(x - tr, y - tr, x + tr, y + tr, fill=self.tiger_color)
+                # self.cids.append(self.canvas.create_oval(x - tr, y - tr, x + tr, y + tr, fill=self.tiger_color))
 
             elif entry == "G":
-                self.cids.append(self.canvas.create_oval(x - sr, y - sr,
-                                                         x + sr, y + sr,
-                                                         fill=self.goat_color))
+                # goat = tkinter.PhotoImage(file="image/goat.png")
+                self.cids.append(self.canvas.create_image(x, y, image=self.goat))
+                # self.cids.append(self.canvas.create_oval(x - sr, y - sr, x + sr, y + sr, fill=self.goat_color))
 
     def check_win(self):
         # read the current board position
@@ -282,10 +286,8 @@ def configure():
         elif config.get('game', 'ai').lower() == 'tiger':
             aivar.set('tiger')
 
-    goat = tkinter.Radiobutton(conftoplevel, text='Goat', variable=aivar,
-                               value='goat')
-    tiger = tkinter.Radiobutton(conftoplevel, text='Tiger', variable=aivar,
-                                value='tiger')
+    goat = tkinter.Radiobutton(conftoplevel, text='Goat', variable=aivar, value='goat')
+    tiger = tkinter.Radiobutton(conftoplevel, text='Tiger', variable=aivar, value='tiger')
 
     goat.pack()
     tiger.pack()
@@ -341,12 +343,19 @@ canvas = tkinter.Canvas(frame, width=680, height=460)
 canvas.pack(fill=BOTH, expand=1, side=TOP, padx=1, pady=1)
 #output = canvas.create_rectangle(500,205,570,235,fill="white",outline="black")
 statustext = tkinter.StringVar()
+
 status = tkinter.Label(frame, textvariable=statustext,
                        borderwidth=2, relief=RIDGE).place(x=500,y=100)
 #status.place(relx = .5,rely = 0.)
 #status.pack( side=LEFT)
+"""
+status = tkinter.Label(frame, textvariable=statustext, borderwidth=2, relief=RIDGE)
+status.pack(expand=1, side=BOTTOM, fill=X)
+"""
 
-game = UIGame(canvas, statustext)
+tiger = tkinter.PhotoImage(file="image/bagh.png")
+goat = tkinter.PhotoImage(file="image/goat.png")
+game = UIGame(canvas, statustext, tiger, goat)
 tk.bind('<Control-n>', lambda event: game.new())
 # tk.bind('<Control-u>', lambda event: game.undo())
 
